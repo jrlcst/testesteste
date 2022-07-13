@@ -1,0 +1,11 @@
+select colaborador, area, media_pontuacao from 
+(select col.nome colaborador, acon.descritivo area, avg(nc.pontuacao) media_pontuacao, acar.expectativa expectativa 
+  from tst_t_assunto_colab ac 
+  inner join tst_t_assunto ass on ac.id_assunto = ass.id 
+  inner join tst_t_nivel_con nc on nc.id = ac.id_nivel 
+  left join tst_t_area_con acon on acon.id = ass.id_area_con 
+  inner join tst_t_colaboradores col on ac.id_colaborador = col.id 
+  inner join tst_t_area_cargo acar on acar.id_area = acon.id 
+  where col.id_cargo = acar.id_cargo 
+  group by acon.descritivo, col.nome, acar.expectativa) 
+where media_pontuacao < expectativa order by media_pontuacao
